@@ -1,0 +1,164 @@
+loadstring([[
+--// Ultimate BABFT Style GUI
+--// By You 😎
+
+-- Services
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Player = Players.LocalPlayer
+
+-- Cleanup
+if game.CoreGui:FindFirstChild("UltimateBABFT") then
+    game.CoreGui.UltimateBABFT:Destroy()
+end
+
+-- ScreenGui
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+ScreenGui.Name = "UltimateBABFT"
+ScreenGui.ResetOnSpawn = false
+
+-- Main Frame
+local Main = Instance.new("Frame", ScreenGui)
+Main.Size = UDim2.fromScale(0.4, 0.45)
+Main.Position = UDim2.fromScale(0.3, 0.25)
+Main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Main.BorderSizePixel = 0
+Main.Active = true
+Main.Draggable = true
+Main.Name = "Main"
+
+-- Corner
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
+
+-- Title Bar
+local Top = Instance.new("Frame", Main)
+Top.Size = UDim2.new(1, 0, 0.12, 0)
+Top.BackgroundColor3 = Color3.fromRGB(18,18,18)
+Top.BorderSizePixel = 0
+
+Instance.new("UICorner", Top).CornerRadius = UDim.new(0,12)
+
+-- Title
+local Title = Instance.new("TextLabel", Top)
+Title.Size = UDim2.fromScale(1,1)
+Title.BackgroundTransparency = 1
+Title.Text = "🔥 Ultimate BABFT Script"
+Title.TextColor3 = Color3.fromRGB(255,170,0)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+-- Tabs
+local Tabs = Instance.new("Frame", Main)
+Tabs.Size = UDim2.new(0.25,0,0.88,0)
+Tabs.Position = UDim2.fromScale(0,0.12)
+Tabs.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Tabs.BorderSizePixel = 0
+
+-- Content
+local Content = Instance.new("Frame", Main)
+Content.Size = UDim2.new(0.75,0,0.88,0)
+Content.Position = UDim2.fromScale(0.25,0.12)
+Content.BackgroundColor3 = Color3.fromRGB(30,30,30)
+Content.BorderSizePixel = 0
+
+-- Layouts
+Instance.new("UIListLayout", Tabs).Padding = UDim.new(0,8)
+local Padding = Instance.new("UIPadding", Tabs)
+Padding.PaddingTop = UDim.new(0,10)
+
+-- Function: Create Page
+local Pages = {}
+local function CreatePage(name)
+    local Page = Instance.new("ScrollingFrame", Content)
+    Page.Size = UDim2.fromScale(1,1)
+    Page.CanvasSize = UDim2.fromScale(0,2)
+    Page.ScrollBarImageTransparency = 1
+    Page.Visible = false
+    Pages[name] = Page
+
+    local layout = Instance.new("UIListLayout", Page)
+    layout.Padding = UDim.new(0,10)
+
+    local pad = Instance.new("UIPadding", Page)
+    pad.PaddingTop = UDim.new(0,10)
+
+    return Page
+end
+
+-- Function: Create Tab Button
+local function CreateTab(name)
+    local Btn = Instance.new("TextButton", Tabs)
+    Btn.Size = UDim2.new(1,-10,0,40)
+    Btn.BackgroundColor3 = Color3.fromRGB(35,35,35)
+    Btn.Text = name
+    Btn.TextColor3 = Color3.fromRGB(255,255,255)
+    Btn.Font = Enum.Font.Gotham
+    Btn.TextSize = 14
+
+    Instance.new("UICorner", Btn).CornerRadius = UDim.new(0,8)
+
+    Btn.MouseButton1Click:Connect(function()
+        for _,p in pairs(Pages) do p.Visible = false end
+        Pages[name].Visible = true
+    end)
+end
+
+-- Pages
+local MainPage = CreatePage("Main")
+local PlayerPage = CreatePage("Player")
+local BoatPage = CreatePage("Boat")
+local MiscPage = CreatePage("Misc")
+
+-- Tabs
+CreateTab("Main")
+CreateTab("Player")
+CreateTab("Boat")
+CreateTab("Misc")
+
+MainPage.Visible = true
+
+-- Function: Toggle Button
+local function CreateToggle(parent, text, callback)
+    local Toggle = Instance.new("TextButton", parent)
+    Toggle.Size = UDim2.new(1,-20,0,45)
+    Toggle.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    Toggle.Text = text.." : OFF"
+    Toggle.Font = Enum.Font.Gotham
+    Toggle.TextSize = 14
+    Toggle.TextColor3 = Color3.fromRGB(255,255,255)
+
+    Instance.new("UICorner", Toggle).CornerRadius = UDim.new(0,8)
+
+    local state = false
+    Toggle.MouseButton1Click:Connect(function()
+        state = not state
+        Toggle.Text = text.." : "..(state and "ON" or "OFF")
+        Toggle.BackgroundColor3 = state and Color3.fromRGB(255,140,0) or Color3.fromRGB(40,40,40)
+        callback(state)
+    end)
+end
+
+-- Example Toggles
+CreateToggle(MainPage,"Auto Farm",function(v)
+    print("Auto Farm:",v)
+end)
+
+CreateToggle(PlayerPage,"God Mode",function(v)
+    print("God Mode:",v)
+end)
+
+CreateToggle(BoatPage,"Infinite Wood",function(v)
+    print("Infinite Wood:",v)
+end)
+
+CreateToggle(MiscPage,"Anti AFK",function(v)
+    if v then
+        for _,v in pairs(getconnections(Player.Idled)) do
+            v:Disable()
+        end
+    end
+end)
+
+print("🔥 Ultimate BABFT Script Loaded Successfully!")
+]])()
